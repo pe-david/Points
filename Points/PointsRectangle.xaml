@@ -6,7 +6,9 @@
              xmlns:local="clr-namespace:Points"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="100">
-    <Canvas x:Name="CtrlCanvas" Background="Chocolate">
+    <Canvas x:Name="CtrlCanvas"
+            Background="Chocolate"
+            SizeChanged="CtrlCanvas_OnSizeChanged">
             
     </Canvas>
 </UserControl>
