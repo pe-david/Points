@@ -34,7 +34,13 @@ namespace Points
 
         private void CtrlCanvas_OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            var centerPoint = new Point((e.NewSize.Width - 1) / 2, (e.NewSize.Height - 1) / 2);
+            CtrlCanvas.Children.Clear();
+            DrawGrid((e.NewSize.Width - 1) / 2, (e.NewSize.Height - 1) / 2);
+        }
+
+        private void DrawGrid(double x, double y)
+        {
+            var centerPoint = new Point(x, y);
             DrawRow(centerPoint);
 
             var multiplier = 1;
