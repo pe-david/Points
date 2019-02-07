@@ -73,7 +73,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Point.cs" />
+    <Compile Include="Dot.cs" />
     <Compile Include="PointsRectangle.xaml.cs">
       <DependentUpon>PointsRectangle.xaml</DependentUpon>
     </Compile>

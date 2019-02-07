@@ -20,14 +20,14 @@ namespace Points
     /// </summary>
     public partial class PointsRectangle : UserControl
     {
-        private readonly Point point;
+        private readonly Dot _dot;
 
         public PointsRectangle()
         {
             InitializeComponent();
 
-            point = new Point(12);
-            CtrlCanvas.Children.Add(point.Ellipse);
+            _dot = new Dot(12);
+            CtrlCanvas.Children.Add(_dot.Ellipse);
         }
 
         private void CtrlCanvas_OnSizeChanged(object sender, SizeChangedEventArgs e)
@@ -41,8 +41,8 @@ namespace Points
         {
             if (!PointInRect(x,y)) return;
 
-            Canvas.SetLeft(point.Ellipse, x);
-            Canvas.SetTop(point.Ellipse, y);
+            Canvas.SetLeft(_dot.Ellipse, x);
+            Canvas.SetTop(_dot.Ellipse, y);
         }
 
         private bool PointInRect(double x, double y)

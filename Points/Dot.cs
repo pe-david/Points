@@ -9,11 +9,11 @@ using System.Windows.Shapes;
 
 namespace Points
 {
-    public class Point
+    public class Dot
     {
         public Ellipse Ellipse { get; }
 
-        public Point(int diameter)
+        public Dot(int diameter)
         {
             Ellipse = new Ellipse()
             {
