@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,48 +27,68 @@ namespace Points
     {
         private static readonly int Spacing = 25;
         private static readonly int DotDiameter = 8;
+        private Point _centerPoint;
+        private List<Tuple<decimal, decimal>> _pointsList = new List<Tuple<decimal, decimal>>();
+
+        public static readonly DependencyProperty LaserPointsProperty =
+            DependencyProperty.Register(
+                "LaserPoints",
+                typeof(ObservableCollection<Tuple<decimal, decimal>>),
+                typeof(PointsRectangle),
+                new PropertyMetadata(null));
 
         public PointsRectangle()
         {
             InitializeComponent();
         }
 
+        public ObservableCollection<Tuple<decimal, decimal>> LaserPoints
+        {
+            get { return (ObservableCollection<Tuple<decimal, decimal>>)GetValue(LaserPointsProperty); }
+            set { SetValue(LaserPointsProperty, value); }
+        }
+
         private void CtrlCanvas_OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             CtrlCanvas.Children.Clear();
-            DrawGrid((e.NewSize.Width - 1) / 2, (e.NewSize.Height - 1) / 2);
+            _centerPoint = new Point((e.NewSize.Width - 1) / 2, (e.NewSize.Height - 1) / 2);
+            DrawGrid();
         }
 
-        private void DrawGrid(double x, double y)
+        private void DrawGrid()
         {
-            var centerPoint = new Point(x, y);
-            DrawRow(centerPoint);
+            _pointsList.Clear();
+            DrawRow(_centerPoint);
 
             var multiplier = 1;
-            var newCenter = new Point(centerPoint.X, centerPoint.Y + multiplier * Spacing);
+            var newCenter = new Point(_centerPoint.X, _centerPoint.Y + multiplier * Spacing);
             while (PointInRect(newCenter))
             {
                 DrawRow(newCenter);
 
                 multiplier++;
-                newCenter = new Point(centerPoint.X, centerPoint.Y + multiplier * Spacing);
+                newCenter = new Point(_centerPoint.X, _centerPoint.Y + multiplier * Spacing);
             }
 
             multiplier = 1;
-            newCenter = new Point(centerPoint.X, centerPoint.Y - multiplier * Spacing);
+            newCenter = new Point(_centerPoint.X, _centerPoint.Y - multiplier * Spacing);
             while (PointInRect(newCenter))
             {
                 DrawRow(newCenter);
 
                 multiplier++;
-                newCenter = new Point(centerPoint.X, centerPoint.Y - multiplier * Spacing);
+                newCenter = new Point(_centerPoint.X, _centerPoint.Y - multiplier * Spacing);
             }
+
+            var test = _pointsList.OrderBy(p => p.Item2).ThenBy(p => p.Item1);
+            LaserPoints = new ObservableCollection<Tuple<decimal, decimal>>(test);
         }
 
         private bool DrawDot(Point location)
         {
             if (!PointInRect(location)) return false;
 
+            _pointsList.Add(new Tuple<decimal, decimal>((decimal)location.X, (decimal)location.Y));
             var dot = new Dot(DotDiameter);
             CtrlCanvas.Children.Add(dot.Ellipse);
 
