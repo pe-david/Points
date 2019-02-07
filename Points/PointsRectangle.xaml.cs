@@ -25,10 +25,11 @@ namespace Points
     /// </remarks>
     public partial class PointsRectangle : UserControl
     {
+        private static readonly int PointOverrunOffset = 10;    // keeps dots within the bounding box
         private static readonly int Spacing = 25;
         private static readonly int DotDiameter = 8;
+        private readonly List<Tuple<decimal, decimal>> _pointsList = new List<Tuple<decimal, decimal>>();
         private Point _centerPoint;
-        private List<Tuple<decimal, decimal>> _pointsList = new List<Tuple<decimal, decimal>>();
 
         public static readonly DependencyProperty LaserPointsProperty =
             DependencyProperty.Register(
@@ -80,8 +81,8 @@ namespace Points
                 newCenter = new Point(_centerPoint.X, _centerPoint.Y - multiplier * Spacing);
             }
 
-            var test = _pointsList.OrderBy(p => p.Item2).ThenBy(p => p.Item1);
-            LaserPoints = new ObservableCollection<Tuple<decimal, decimal>>(test);
+            var list = _pointsList.OrderBy(p => p.Item2).ThenBy(p => p.Item1);
+            LaserPoints = new ObservableCollection<Tuple<decimal, decimal>>(list);
         }
 
         private bool DrawDot(Point location)
@@ -124,10 +125,10 @@ namespace Points
 
         private bool PointInRect(Point location)
         {
-            if (!(location.X > 0) || !(location.X < this.ActualWidth))
+            if (!(location.X > 0) || !(location.X < this.ActualWidth - PointOverrunOffset))
                 return false;
 
-            return (location.Y > 0 && location.Y < this.ActualHeight);
+            return (location.Y > 0 && location.Y < this.ActualHeight - PointOverrunOffset);
         }
     }
 }
