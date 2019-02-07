@@ -20,29 +20,55 @@ namespace Points
     /// </summary>
     public partial class PointsRectangle : UserControl
     {
-        private readonly Dot _dot;
+        private static readonly int Spacing = 25;
+        private static readonly int DotDiameter = 10;
+        private Point _centerPoint;
 
         public PointsRectangle()
         {
             InitializeComponent();
-
-            _dot = new Dot(12);
-            CtrlCanvas.Children.Add(_dot.Ellipse);
         }
 
         private void CtrlCanvas_OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            double x = (e.NewSize.Width - 1) / 2;
-            double y = (e.NewSize.Height - 1) / 2;
-            DrawRow(x, y);
+            _centerPoint = new Point((e.NewSize.Width - 1) / 2, (e.NewSize.Height - 1) / 2);
+            DrawRow(_centerPoint);
         }
 
-        private void DrawRow(double x, double y)
+        private bool DrawDot(Point location)
         {
-            if (!PointInRect(x,y)) return;
+            double x = location.X;
+            double y = location.Y;
 
-            Canvas.SetLeft(_dot.Ellipse, x);
-            Canvas.SetTop(_dot.Ellipse, y);
+            if (!PointInRect(x,y)) return false;
+
+            var dot = new Dot(DotDiameter);
+            CtrlCanvas.Children.Add(dot.Ellipse);
+
+            Canvas.SetLeft(dot.Ellipse, x);
+            Canvas.SetTop(dot.Ellipse, y);
+            return true;
+        }
+
+        private void DrawRow(Point centerPoint)
+        {
+            var newPoint = new Point(centerPoint.X, centerPoint.Y);
+            DrawDot(newPoint);
+
+            var pointDrawn = false;
+            do
+            {
+                newPoint = new Point(newPoint.X + Spacing, newPoint.Y);
+                pointDrawn = DrawDot(newPoint);
+            } while (pointDrawn);
+
+            pointDrawn = false;
+            newPoint = new Point(centerPoint.X, centerPoint.Y);
+            do
+            {
+                newPoint = new Point(newPoint.X - Spacing, newPoint.Y);
+                pointDrawn = DrawDot(newPoint);
+            } while (pointDrawn);
         }
 
         private bool PointInRect(double x, double y)
