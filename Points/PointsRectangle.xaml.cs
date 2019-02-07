@@ -16,13 +16,16 @@ using System.Windows.Shapes;
 namespace Points
 {
     /// <summary>
-    /// Interaction logic for PointsRectangle.xaml
+    /// User Control of uniform points spread over a rectangle.
     /// </summary>
+    /// <remarks>
+    /// Spacing constant controls the spacing of the dots.
+    /// DotDiameter constant controls the dot diameter.
+    /// </remarks>
     public partial class PointsRectangle : UserControl
     {
         private static readonly int Spacing = 25;
-        private static readonly int DotDiameter = 10;
-        private Point _centerPoint;
+        private static readonly int DotDiameter = 8;
 
         public PointsRectangle()
         {
@@ -31,27 +34,27 @@ namespace Points
 
         private void CtrlCanvas_OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            _centerPoint = new Point((e.NewSize.Width - 1) / 2, (e.NewSize.Height - 1) / 2);
-            DrawRow(_centerPoint);
+            var centerPoint = new Point((e.NewSize.Width - 1) / 2, (e.NewSize.Height - 1) / 2);
+            DrawRow(centerPoint);
 
             var multiplier = 1;
-            var newCenter = new Point(_centerPoint.X, _centerPoint.Y + multiplier * Spacing);
+            var newCenter = new Point(centerPoint.X, centerPoint.Y + multiplier * Spacing);
             while (PointInRect(newCenter))
             {
                 DrawRow(newCenter);
 
                 multiplier++;
-                newCenter = new Point(_centerPoint.X, _centerPoint.Y + multiplier * Spacing);
+                newCenter = new Point(centerPoint.X, centerPoint.Y + multiplier * Spacing);
             }
 
             multiplier = 1;
-            newCenter = new Point(_centerPoint.X, _centerPoint.Y - multiplier * Spacing);
+            newCenter = new Point(centerPoint.X, centerPoint.Y - multiplier * Spacing);
             while (PointInRect(newCenter))
             {
                 DrawRow(newCenter);
 
                 multiplier++;
-                newCenter = new Point(_centerPoint.X, _centerPoint.Y - multiplier * Spacing);
+                newCenter = new Point(centerPoint.X, centerPoint.Y - multiplier * Spacing);
             }
         }
 
