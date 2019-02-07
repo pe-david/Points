@@ -33,25 +33,44 @@ namespace Points
         {
             _centerPoint = new Point((e.NewSize.Width - 1) / 2, (e.NewSize.Height - 1) / 2);
             DrawRow(_centerPoint);
+
+            var multiplier = 1;
+            var newCenter = new Point(_centerPoint.X, _centerPoint.Y + multiplier * Spacing);
+            while (PointInRect(newCenter))
+            {
+                DrawRow(newCenter);
+
+                multiplier++;
+                newCenter = new Point(_centerPoint.X, _centerPoint.Y + multiplier * Spacing);
+            }
+
+            multiplier = 1;
+            newCenter = new Point(_centerPoint.X, _centerPoint.Y - multiplier * Spacing);
+            while (PointInRect(newCenter))
+            {
+                DrawRow(newCenter);
+
+                multiplier++;
+                newCenter = new Point(_centerPoint.X, _centerPoint.Y - multiplier * Spacing);
+            }
         }
 
         private bool DrawDot(Point location)
         {
-            double x = location.X;
-            double y = location.Y;
-
-            if (!PointInRect(x,y)) return false;
+            if (!PointInRect(location)) return false;
 
             var dot = new Dot(DotDiameter);
             CtrlCanvas.Children.Add(dot.Ellipse);
 
-            Canvas.SetLeft(dot.Ellipse, x);
-            Canvas.SetTop(dot.Ellipse, y);
+            Canvas.SetLeft(dot.Ellipse, location.X);
+            Canvas.SetTop(dot.Ellipse, location.Y);
             return true;
         }
 
-        private void DrawRow(Point centerPoint)
+        private bool DrawRow(Point centerPoint)
         {
+            if (!PointInRect(centerPoint)) return false;
+
             var newPoint = new Point(centerPoint.X, centerPoint.Y);
             DrawDot(newPoint);
 
@@ -69,14 +88,16 @@ namespace Points
                 newPoint = new Point(newPoint.X - Spacing, newPoint.Y);
                 pointDrawn = DrawDot(newPoint);
             } while (pointDrawn);
+
+            return true;
         }
 
-        private bool PointInRect(double x, double y)
+        private bool PointInRect(Point location)
         {
-            if (!(x > 0) || !(x < this.ActualWidth))
+            if (!(location.X > 0) || !(location.X < this.ActualWidth))
                 return false;
 
-            return (y > 0 && y < this.ActualHeight);
+            return (location.Y > 0 && location.Y < this.ActualHeight);
         }
     }
 }
