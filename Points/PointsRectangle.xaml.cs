@@ -26,19 +26,31 @@ namespace Points
         {
             InitializeComponent();
 
-            point = new Point(5);
+            point = new Point(12);
             CtrlCanvas.Children.Add(point.Ellipse);
         }
 
         private void CtrlCanvas_OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            DrawPoints(e.NewSize.Height, e.NewSize.Width);
+            double x = (e.NewSize.Width - 1) / 2;
+            double y = (e.NewSize.Height - 1) / 2;
+            DrawRow(x, y);
         }
 
-        private void DrawPoints(double height, double width)
+        private void DrawRow(double x, double y)
         {
-            Canvas.SetLeft(point.Ellipse, (width - 1) / 2);
-            Canvas.SetTop(point.Ellipse, (height - 1) / 2);
+            if (!PointInRect(x,y)) return;
+
+            Canvas.SetLeft(point.Ellipse, x);
+            Canvas.SetTop(point.Ellipse, y);
+        }
+
+        private bool PointInRect(double x, double y)
+        {
+            if (!(x > 0) || !(x < this.ActualWidth))
+                return false;
+
+            return (y > 0 && y < this.ActualHeight);
         }
     }
 }
