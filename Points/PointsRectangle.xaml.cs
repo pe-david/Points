@@ -25,11 +25,12 @@ namespace Points
     /// </remarks>
     public partial class PointsRectangle : UserControl
     {
-        private static readonly int PointOverrunOffset = 10;    // keeps dots within the bounding box
-        private static readonly int Spacing = 25;
-        private static readonly int DotDiameter = 8;
+        private static readonly int Spacing = 50;
+        private static readonly int DotDiameter = 15;
         private readonly List<Tuple<decimal, decimal>> _pointsList = new List<Tuple<decimal, decimal>>();
         private Point _centerPoint;
+        private double _height;
+        private double _width;
 
         public static readonly DependencyProperty LaserPointsProperty =
             DependencyProperty.Register(
@@ -45,14 +46,17 @@ namespace Points
 
         public ObservableCollection<Tuple<decimal, decimal>> LaserPoints
         {
-            get { return (ObservableCollection<Tuple<decimal, decimal>>)GetValue(LaserPointsProperty); }
-            set { SetValue(LaserPointsProperty, value); }
+            get => (ObservableCollection<Tuple<decimal, decimal>>)GetValue(LaserPointsProperty);
+            set => SetValue(LaserPointsProperty, value);
         }
 
         private void CtrlCanvas_OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
+            _height = e.NewSize.Height - DotDiameter;
+            _width = e.NewSize.Width - DotDiameter;
             CtrlCanvas.Children.Clear();
-            _centerPoint = new Point((e.NewSize.Width - 1) / 2, (e.NewSize.Height - 1) / 2);
+
+            _centerPoint = new Point(_width / 2, _height / 2);
             DrawGrid();
         }
 
@@ -125,10 +129,10 @@ namespace Points
 
         private bool PointInRect(Point location)
         {
-            if (!(location.X > 0) || !(location.X < this.ActualWidth - PointOverrunOffset))
+            if (!(location.X > 0) || !(location.X < CtrlCanvas.ActualWidth - DotDiameter))
                 return false;
 
-            return (location.Y > 0 && location.Y < this.ActualHeight - PointOverrunOffset);
+            return (location.Y > 0 && location.Y < CtrlCanvas.ActualHeight - DotDiameter);
         }
     }
 }
