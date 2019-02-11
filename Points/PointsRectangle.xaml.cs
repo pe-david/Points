@@ -37,41 +37,17 @@ namespace Points
                 typeof(PointsRectangle),
                 new PropertyMetadata(null));
 
-
-
-
-        public int Pitch
-        {
-            get => (int)GetValue(PitchProperty);
-            set => SetValue(PitchProperty, value);
-        }
-
         public static readonly DependencyProperty PitchProperty =
             DependencyProperty.Register(
                 "Pitch", typeof(int),
                 typeof(PointsRectangle),
                 new PropertyMetadata(25));
 
-
-        public int DotDiameter
-        {
-            get => (int)GetValue(DotDiameterProperty);
-            set => SetValue(DotDiameterProperty, value);
-        }
-
         public static readonly DependencyProperty DotDiameterProperty =
             DependencyProperty.Register(
                 "DotDiameter", typeof(int),
                 typeof(PointsRectangle),
                 new PropertyMetadata(10));
-
-
-
-
-
-
-
-
 
         public PointsRectangle()
         {
@@ -82,6 +58,18 @@ namespace Points
         {
             get => (ObservableCollection<Tuple<decimal, decimal>>)GetValue(LaserPointsProperty);
             set => SetValue(LaserPointsProperty, value);
+        }
+
+        public int Pitch
+        {
+            get => (int)GetValue(PitchProperty);
+            set => SetValue(PitchProperty, value);
+        }
+
+        public int DotDiameter
+        {
+            get => (int)GetValue(DotDiameterProperty);
+            set => SetValue(DotDiameterProperty, value);
         }
 
         private void CtrlCanvas_OnSizeChanged(object sender, SizeChangedEventArgs e)
