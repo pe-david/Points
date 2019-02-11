@@ -18,6 +18,6 @@
             <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <local:PointsRectangle Grid.Row="1" Grid.Column="1" />
+        <local:PointsRectangle Grid.Row="1" Grid.Column="1" Pitch="25" DotDiameter="8" />
     </Grid>
 </Window>

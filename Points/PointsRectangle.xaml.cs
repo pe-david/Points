@@ -25,8 +25,6 @@ namespace Points
     /// </remarks>
     public partial class PointsRectangle : UserControl
     {
-        private static readonly int Spacing = 50;
-        private static readonly int DotDiameter = 15;
         private readonly List<Tuple<decimal, decimal>> _pointsList = new List<Tuple<decimal, decimal>>();
         private Point _centerPoint;
         private double _height;
@@ -38,6 +36,42 @@ namespace Points
                 typeof(ObservableCollection<Tuple<decimal, decimal>>),
                 typeof(PointsRectangle),
                 new PropertyMetadata(null));
+
+
+
+
+        public int Pitch
+        {
+            get => (int)GetValue(PitchProperty);
+            set => SetValue(PitchProperty, value);
+        }
+
+        public static readonly DependencyProperty PitchProperty =
+            DependencyProperty.Register(
+                "Pitch", typeof(int),
+                typeof(PointsRectangle),
+                new PropertyMetadata(25));
+
+
+        public int DotDiameter
+        {
+            get => (int)GetValue(DotDiameterProperty);
+            set => SetValue(DotDiameterProperty, value);
+        }
+
+        public static readonly DependencyProperty DotDiameterProperty =
+            DependencyProperty.Register(
+                "DotDiameter", typeof(int),
+                typeof(PointsRectangle),
+                new PropertyMetadata(10));
+
+
+
+
+
+
+
+
 
         public PointsRectangle()
         {
@@ -66,23 +100,23 @@ namespace Points
             DrawRow(_centerPoint);
 
             var multiplier = 1;
-            var newCenter = new Point(_centerPoint.X, _centerPoint.Y + multiplier * Spacing);
+            var newCenter = new Point(_centerPoint.X, _centerPoint.Y + multiplier * Pitch);
             while (PointInRect(newCenter))
             {
                 DrawRow(newCenter);
 
                 multiplier++;
-                newCenter = new Point(_centerPoint.X, _centerPoint.Y + multiplier * Spacing);
+                newCenter = new Point(_centerPoint.X, _centerPoint.Y + multiplier * Pitch);
             }
 
             multiplier = 1;
-            newCenter = new Point(_centerPoint.X, _centerPoint.Y - multiplier * Spacing);
+            newCenter = new Point(_centerPoint.X, _centerPoint.Y - multiplier * Pitch);
             while (PointInRect(newCenter))
             {
                 DrawRow(newCenter);
 
                 multiplier++;
-                newCenter = new Point(_centerPoint.X, _centerPoint.Y - multiplier * Spacing);
+                newCenter = new Point(_centerPoint.X, _centerPoint.Y - multiplier * Pitch);
             }
 
             var list = _pointsList.OrderBy(p => p.Item2).ThenBy(p => p.Item1);
@@ -112,7 +146,7 @@ namespace Points
             var pointDrawn = false;
             do
             {
-                newPoint = new Point(newPoint.X + Spacing, newPoint.Y);
+                newPoint = new Point(newPoint.X + Pitch, newPoint.Y);
                 pointDrawn = DrawDot(newPoint);
             } while (pointDrawn);
 
@@ -120,7 +154,7 @@ namespace Points
             newPoint = new Point(centerPoint.X, centerPoint.Y);
             do
             {
-                newPoint = new Point(newPoint.X - Spacing, newPoint.Y);
+                newPoint = new Point(newPoint.X - Pitch, newPoint.Y);
                 pointDrawn = DrawDot(newPoint);
             } while (pointDrawn);
 

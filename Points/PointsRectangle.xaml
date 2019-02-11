@@ -9,7 +9,7 @@
     <Grid>
         <Border BorderBrush="Black" BorderThickness="4">
             <Canvas x:Name="CtrlCanvas"
-                Background="Chocolate"
+                Background="BlanchedAlmond"
                 SizeChanged="CtrlCanvas_OnSizeChanged">
             </Canvas>
         </Border>
